@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi - Masa Penjajahan Barat</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#4f46e5',
+                        secondary: '#7e22ce',
+                        accent: '#0ea5e9',
+                        light: '#f8fafc',
+                        dark: '#1e293b',
+                        paper: '#fefefe'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-right': 'slideRight 0.8s ease-out',
+                        'zoom-in': 'zoomIn 0.8s ease-out',
+                        'bounce-in': 'bounceIn 0.8s ease-out',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'float': 'float 6s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        zoomIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(79, 70, 229, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(79, 70, 229, 0.8)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .presentation-container {
+            perspective: 1000px;
+        }
+        
+        .slide {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            background: linear-gradient(145deg, #ffffff, #f5f5f5);
+        }
+        
+        .slide:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .slide-active {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            animation: pulseGlow 2s infinite;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(to right, #4f46e5, #7e22ce);
+            transition: width 0.5s ease;
+        }
+        
+        .decoration-circle {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .decoration-line {
+            position: absolute;
+            opacity: 0.1;
+            z-index: 0;
+        }
+        
+        .content-table {
+            border-collapse: collapse;
+            width: 100%;
+        }
+        
+        .content-table th, .content-table td {
+            border: 1px solid #e2e8f0;
+            padding: 8px 12px;
+            text-align: left;
+        }
+        
+        .content-table th {
+            background-color: #f1f5f9;
+        }
+        
+        .timeline-item {
+            position: relative;
+            padding-left: 30px;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 5px;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #4f46e5;
+        }
+        
+        .timeline-item:after {
+            content: '';
+            position: absolute;
+            left: 5px;
+            top: 17px;
+            width: 2px;
+            height: calc(100% + 10px);
+            background-color: #cbd5e1;
+        }
+        
+        .timeline-item:last-child:after {
+            display: none;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="presentation-container min-h-screen py-8 px-4 relative overflow-hidden">
+        <!-- Background Decorations -->
+        <div class="decoration-circle w-64 h-64 bg-primary top-10 -left-20 floating"></div>
+        <div class="decoration-circle w-40 h-40 bg-secondary top-1/2 -right-10 floating" style="animation-delay: 1s;"></div>
+        <div class="decoration-circle w-80 h-80 bg-accent bottom-10 left-1/4 floating" style="animation-delay: 2s;"></div>
+        <div class="decoration-line w-1 h-96 bg-primary top-20 right-1/4 rotate-45 floating" style="animation-delay: 0.5s;"></div>
+        <div class="decoration-line w-1 h-64 bg-secondary bottom-20 left-1/3 -rotate-12 floating" style="animation-delay: 1.5s;"></div>
+        
+        <!-- Header -->
+        <header class="text-center mb-12 animate-fade-in relative z-10">
+            <div class="floating inline-block mb-4">
+                <i class="fas fa-landmark text-5xl text-primary"></i>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-dark mb-2">Masa Penjajahan Barat</h1>
+            <p class="text-gray-600 max-w-2xl mx-auto">BAB 1 - Sejarah Indonesia</p>
+            <div class="progress-bar w-1/4 mx-auto mt-4 rounded-full"></div>
+        </header>
+        
+        <!-- Slides Container -->
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 relative z-10">
+            <!-- Slide 1 - Latar Belakang -->
+            <div class="slide bg-white rounded-2xl p-8 animate-slide-up cursor-pointer slide-active" data-slide="1">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">A</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Latar Belakang Penjajahan Barat</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="flex items-start">
+                        <i class="fas fa-map-marked-alt text-primary mt-1 mr-3"></i>
+                        <p class="text-gray-700">Terhambatnya jalur perdagangan Eropa ke Asia karena jatuhnya Konstantinopel (1453) ke tangan Kesultanan Turki Utsmani; → membuat bangsa‐Eropa mencari jalan laut langsung ke Asia Timur / Nusantara.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-pepper-hot text-primary mt-1 mr-3"></i>
+                        <p class="text-gray-700">Tuntutan atas rempah-rempah (cengkih, pala, lada, dll) sebagai komoditas yang sangat bernilai di Eropa.</p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-crown text-primary mt-1 mr-3"></i>
+                        <p class="text-gray-700">Keinginan untuk memperluas pengaruh politik dan agama (misionaris Katolik / Protestan) serta mendapatkan kekayaan “gold” dan kejayaan (“glory”) dalam konteks persaingan antar bangsa Eropa. </p>
+                    </div>
+                    <div class="flex items-start">
+                        <i class="fas fa-ship text-primary mt-1 mr-3"></i>
+                        <p class="text-gray-700">Perkembangan teknologi pelayaran: kapal yang lebih baik, navigasi, kompas, alat pengukur astronomi, peta, dsb. </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 2 - Kedatangan Bangsa Barat -->
+            <div class="slide bg-white rounded-2xl p-8 animate-slide-right cursor-pointer" data-slide="2">
+                <div class="flex items-center mb-6">
+                    <div class="bg-secondary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">B</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Kedatangan Bangsa Barat ke Nusantara</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-blue-50 p-4 rounded-lg border-l-4 border-blue-500">
+                        <h3 class="font-bold text-blue-700">Portugis</h3>
+                        <p class="text-gray-700 text-sm">Pertama kali sukses menjelajah samudera dan mendarat di Nusantara (Maluku) lewat jalur selatan (sekitar Malaka) untuk menguasai perdagangan rempah. </p>
+                    </div>
+                    <div class="bg-red-50 p-4 rounded-lg border-l-4 border-red-500">
+                        <h3 class="font-bold text-red-700">Spanyol</h3>
+                        <p class="text-gray-700 text-sm">Juga menjajaki melalui perjanjian seperti Tordesillas yang membagi pengaruh antara Portugis dan Spanyol</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg border-l-4 border-orange-500">
+                        <h3 class="font-bold text-orange-700">Belanda</h3>
+                        <p class="text-gray-700 text-sm">mendirikan VOC (Vereenigde Oost Indische Compagnie) pada tahun 1602. VOC mendapat hak spesial dan monopoli perdagangan rempah.</p>
+                    </div>
+                    <div class="bg-purple-50 p-4 rounded-lg border-l-4 border-purple-500">
+                        <h3 class="font-bold text-purple-700">Inggris</h3>
+                        <p class="text-gray-700 text-sm">pernah memiliki pengaruh dan wilayah di beberapa tempat (contoh: sebagian Sumatra, Bencoolen, dsb), meskipun pengaruhnya tak sebesar Belanda.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 3 - Periode dan Bentuk Penjajahan -->
+            <div class="slide bg-white rounded-2xl p-8 animate-zoom-in cursor-pointer" data-slide="3">
+                <div class="flex items-center mb-6">
+                    <div class="bg-accent text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">C</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Periode dan Bentuk Penjajahan</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">VOC (Awal Kolonialisme Dagang)</h3>
+                        <p class="text-gray-700 text-sm">Berubah menjadi kolonialisme politik langsung setelah bubarnya VOC (1799)</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">Penjajahan Belanda Langsung</h3>
+                        <p class="text-gray-700 text-sm">Melalui pemerintahan Hindia Belanda setelah bubarnya VOC</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">Cultuurstelsel (Tanam Paksa)</h3>
+                        <p class="text-gray-700 text-sm">Periode kebijakan spesifik seperti Cultuurstelsel (Tanam Paksa) yang diberlakukan sejak 1830 oleh Van den Bosch. </p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">Politik Etis (Ethical Policy)</h3>
+                        <p class="text-gray-700 text-sm">Politik Etis (Ethical Policy) pada awal abad ke-20 sebagai respons terhadap kritik atas kejamnya sistem sebelumnya. </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 4 - Kebijakan Penjajahan -->
+            <div class="slide bg-white rounded-2xl p-8 animate-bounce-in cursor-pointer" data-slide="4">
+                <div class="flex items-center mb-6">
+                    <div class="bg-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">D</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Kebijakan Penjajahan</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="content-table min-w-full">
+                        <thead>
+                            <tr>
+                                <th>Kebijakan</th>
+                                <th>Penjelasan</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">Hak monopoli & perdagangan</td>
+                                <td>VOC punya hak monopoli dalam perdagangan rempah, kontrol pelabuhan dan rute pengiriman. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Cultuurstelsel / Tanam Paksa</td>
+                                <td>Wajib menanam tanaman ekspor untuk keuntungan Belanda, rakyat dipaksa menggarap tanaman rempah/pala.</td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Politik Etis</td>
+                                <td>Sekitar awal 1900‐an, Belanda perhatian pada pendidikan, kesehatan, irigasi, kebijakan perbaikan sosial. Ada pernyataan tanggung jawab moral (“etis”) untuk merawat rakyat jajahan. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Pembentukan pemerintahan kolonial</td>
+                                <td>Penentuan Gubernur Jenderal, pengaturan wilayah, pengumpulan pajak, sistem hukum kolonial. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Infrastruktur</td>
+                                <td>Pembangunan jalan, rel kereta api, pelabuhan, sistem pos dan telegraph, dsb., untuk keperluan ekspor barang dan kontrol militer. </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Slide 5 - Dampak Penjajahan -->
+            <div class="slide bg-white rounded-2xl p-8 animate-slide-up cursor-pointer" data-slide="5">
+                <div class="flex items-center mb-6">
+                    <div class="bg-yellow-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">E</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Dampak Penjajahan</h2>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="content-table min-w-full">
+                        <thead>
+                            <tr>
+                                <th>Bidang</th>
+                                <th>Dampak Negatif</th>
+                                <th>Dampak Positif</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td class="font-medium">Politik</td>
+                                <td>Hilangnya kedaulatan lokal, pembatasan kekuasaan raja/kesultanan setempat, eksploitasi politik oleh penjajah. </td>
+                                <td>Terbentuknya struktur kenegaraan modern, birokrasi, pengalaman administrasi yang kelak dipakai bangsa sendiri. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Ekonomi</td>
+                                <td>Eksploitasi sumber daya (rempah, pertambangan, tanaman ekspor), kerja paksa, ketergantungan ekonomi, ketidakadilan distribusi kekayaan. </td>
+                                <td>Pengenalan tanaman ekspor baru, sistem perkebunan komersial, sedikit pengembangan infrastruktur untuk mendukung ekonomi ekspor. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Sosial</td>
+                                <td>Ketimpangan sosial, penderitaan rakyat tani, kelaparan, perpindahan penduduk karena kerja rodi/tanam paksa, penyakit yang menyebar.</td>
+                                <td>Adanya mobilitas sosial terbatas lewat pendidikan, munculnya kelas terdidik pribumi. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Budaya & Pendidikan</td>
+                                <td>Pengurangan peran budaya lokal, pemaksaan budaya asing, diskriminasi rasial / budaya, pendidikan awal terbatas pada elite. </td>
+                                <td>Masuknya sistem pendidikan Barat, bahasa (Belanda), teknologi, ilmu pengetahuan baru, munculnya kesadaran nasional. </td>
+                            </tr>
+                            <tr>
+                                <td class="font-medium">Kesehatan & Demografi</td>
+                                <td>Penyakit baru, kematian akibat kebijakan kerja paksa, kondisi hidup buruk bagi rakyat. </td>
+                                <td>Pembangunan fasilitas kesehatan (walau terbatas), perbaikan sanitasi di beberapa kota. </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Slide 6 - Perlawanan terhadap Penjajahan -->
+            <div class="slide bg-white rounded-2xl p-8 animate-slide-right cursor-pointer" data-slide="6">
+                <div class="flex items-center mb-6">
+                    <div class="bg-red-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">F</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Perlawanan terhadap Penjajahan</h2>
+                </div>
+                <div class="mb-4">
+                    <p>Berbagai bentuk dan tokoh perlawanan dari abad ke-16 sampai abad ke-20:</p>
+                </div>
+                <div class="space-y-4">
+                    <div class="bg-red-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-red-700 mb-2">Perlawanan terhadap Portugis dan Spanyol</h3>
+                        <p class="text-gray-700 text-sm">Contohnya perlawanan Aceh terhadap Portugis di pantai utara Sumatra</p>
+                    </div>
+                    <div class="bg-orange-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-orange-700 mb-2">Perlawanan terhadap VOC & Belanda</h3>
+                        <div class="grid grid-cols-2 gap-2 mt-2">
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Sultan Nuku di Maluku</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Sultan Agung dari Mataram</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Sultan Ageng Tirtayasa di Banten</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Perang Diponegoro (1825-1830)</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Perang Padri di Sumatra Barat</span>
+                            </div>
+                            <div class="flex items-center">
+                                <i class="fas fa-user text-orange-500 mr-2 text-sm"></i>
+                                <span class="text-gray-700 text-sm">Perang Banjarmasin, , Perang Puputan di Bali, perlawanan di Maluku, dan sebagainya. </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="bg-blue-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-blue-700">Perlawanan Non-Militer</h3>
+                        <p class="text-gray-700 text-sm">Perlawanan non militer juga muncul melalui diplomasi, penggunaan lembaga pendidikan, penyebaran ide nasionalisme, pers, organisasi, kesenian. </p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 7 - Situasi Akhir Masa Penjajahan -->
+            <div class="slide bg-white rounded-2xl p-8 animate-zoom-in cursor-pointer" data-slide="7">
+                <div class="flex items-center mb-6">
+                    <div class="bg-purple-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">G</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Situasi pada Akhir Masa Penjajahan</h2>
+                </div>
+                <div class="space-y-6">
+                    <div class="bg-purple-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-purple-700">Keterpurukan Belanda</h3>
+                        <p class="text-gray-700">Selama Perang Dunia II, Jepang menginvasi dan menduduki Indonesia sejak Maret 1942; Belanda menyerah tanpa syarat</p>
+                    </div>
+                    <div class="bg-indigo-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-indigo-700">Kebangkitan Nasionalisme</h3>
+                        <p class="text-gray-700">Semakin kuat terutama sejak abad ke-20: organisasi politik, pemikiran, kesadaran rakyat</p>
+                    </div>
+                    <div class="bg-pink-50 p-4 rounded-lg">
+                        <h3 class="font-bold text-pink-700">Dampak Pendudukan Jepang</h3>
+                        <p class="text-gray-700">Membangkitkan semangat militer rakyat, pelatihan militer, organisasi militer semimiliter, seperti PETA</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Slide 8 - Kronologi -->
+            <div class="slide bg-white rounded-2xl p-8 animate-bounce-in cursor-pointer" data-slide="8">
+                <div class="flex items-center mb-6">
+                    <div class="bg-gray-600 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <h2 class="text-xl font-bold text-dark ml-4">Kronologi Singkat</h2>
+                </div>
+                <div class="space-y-4">
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">≈1453</h3>
+                        <p class="text-gray-700">Jatuhnya Konstantinopel; jalur ke Asia terhambat</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">Akhir abad ke-15 – awal abad ke-16</h3>
+                        <p class="text-gray-700">Portugis & Spanyol mulai ekspansi ke Asia, Portugis ke Maluku</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">1602</h3>
+                        <p class="text-gray-700">Pembentukan VOC oleh Belanda</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">1799</h3>
+                        <p class="text-gray-700">VOC dibubarkan; pemerintahan langsung Hindia Belanda</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">1830</h3>
+                        <p class="text-gray-700">Pengenalan Cultuurstelsel</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">Awal abad ke-20</h3>
+                        <p class="text-gray-700">Politik Etis; munculnya organisasi nasionalis; pendidikan diperluas</p>
+                    </div>
+                    <div class="timeline-item">
+                        <h3 class="font-bold text-dark">1942</h3>
+                        <p class="text-gray-700">Pendudukan Jepang mengakhiri kekuasaan Belanda secara de facto</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.querySelector('.progress-bar');
+            let currentSlide = 0;
+            
+            // Fungsi untuk mengupdate slide aktif
+            function updateActiveSlide() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('slide-active');
+                    } else {
+                        slide.classList.remove('slide-active');
+                    }
+                });
+                
+                // Update progress bar
+                progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+            }
+            
+            // Event listener untuk klik pada slide
+            slides.forEach((slide, index) => {
+                slide.addEventListener('click', function() {
+                    currentSlide = index;
+                    updateActiveSlide();
+                });
+            });
+            
+            // Animasi tambahan saat halaman dimuat
+            setTimeout(() => {
+                document.querySelector('header').classList.add('animate-fade-in');
+                
+                slides.forEach((slide, index) => {
+                    setTimeout(() => {
+                        slide.style.opacity = '1';
+                        slide.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 500);
+            
+            // Inisialisasi
+            updateActiveSlide();
+            
+            // Auto-rotate slides setiap 10 detik
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateActiveSlide();
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
