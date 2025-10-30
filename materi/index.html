@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Sejarah Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        light: '#f8fafc',
+                        dark: '#1e293b'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-right': 'slideRight 0.8s ease-out',
+                        'zoom-in': 'zoomIn 0.8s ease-out',
+                        'bounce-in': 'bounceIn 0.8s ease-out',
+                        'pulse-glow': 'pulseGlow 2s infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        zoomIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .presentation-container {
+            perspective: 1000px;
+        }
+        
+        .slide {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            cursor: pointer;
+        }
+        
+        .slide:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .slide-active {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            animation: pulseGlow 2s infinite;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+
+        /* ===== Modern Canva-like button styles (only buttons) ===== */
+        .modern-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 6px 20px rgba(16,24,40,0.08);
+            border: 0;
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .modern-btn:focus { outline: none; box-shadow: 0 8px 30px rgba(34, 197, 94, 0.12); }
+
+        .modern-btn:hover { transform: translateY(-4px); }
+        .modern-btn:active { transform: translateY(-1px) scale(0.995); }
+
+        /* Gradient variants tuned to the slide color scheme */
+        .modern-btn.primary {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.18);
+        }
+        .modern-btn.secondary {
+            background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #06b6d4 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(139,92,246,0.18);
+        }
+        .modern-btn.accent {
+            background: linear-gradient(90deg, #06b6d4 0%, #34d399 50%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(6,182,212,0.16);
+        }
+        .modern-btn.green {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.14);
+        }
+
+        /* small icon circle inside button for a 'pill + icon' vibe */
+        .modern-btn .icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            display: inline-grid;
+            place-items: center;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Ensure we didn't change other layout — only button-specific styling above */
+        /* End button styles */
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="presentation-container min-h-screen py-8 px-4">
+        
+        <!-- Slides Container -->
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Slide 1 -->
+            <a href="https://master-kode.github.io/kodular/materi/BAB-1.html" class="slide bg-white rounded-2xl p-8 animate-slide-up cursor-pointer">
+                <div class="flex items-center mb-6">
+                    <div class="bg-primary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">1</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">BAB 1</h2>
+                </div>
+                    <h3 class="text-2xl font-bold text-dark mb-4">Masa Penjajahan Barat</h3>
+                    <p class="text-gray-600 mb-6">Periode ketika bangsa Eropa mulai menguasai wilayah Nusantara untuk kepentingan ekonomi dan politik.</p>
+                </a>
+            
+            <!-- Slide 2 -->
+            <div class="slide bg-white rounded-2xl p-8 animate-slide-right cursor-pointer">
+                <div class="flex items-center mb-6">
+                    <div class="bg-secondary text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">2</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">BAB 2</h2>
+                </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Perlawanan Rakyat Menentang Penjajah</h3>
+                <p class="text-gray-600 mb-6">Berbagai upaya perlawanan yang dilakukan oleh rakyat Indonesia terhadap penjajah asing.</p>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="slide bg-white rounded-2xl p-8 animate-zoom-in cursor-pointer">
+                <div class="flex items-center mb-6">
+                    <div class="bg-accent text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">3</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">BAB 3</h2>
+                </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Pergerakan Kebangsaan Indonesia</h3>
+                <p class="text-gray-600 mb-6">Munculnya organisasi-organisasi yang memperjuangkan kemerdekaan Indonesia.</p>
+            </div>
+            
+            <!-- Slide 4 -->
+            <div class="slide bg-white rounded-2xl p-8 animate-bounce-in cursor-pointer">
+                <div class="flex items-center mb-6">
+                    <div class="bg-green-500 text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl">4</div>
+                    <h2 class="text-xl font-bold text-dark ml-4">BAB 4</h2>
+                </div>
+                <h3 class="text-2xl font-bold text-dark mb-4">Pendudukan Jepang dan Proklamasi</h3>
+                <p class="text-gray-600 mb-6">Periode pendudukan Jepang dan peristiwa penting menuju proklamasi kemerdekaan.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.querySelector('.progress-bar');
+            let currentSlide = 0;
+            
+            // Fungsi untuk mengupdate slide aktif
+            function updateActiveSlide() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('slide-active');
+                    } else {
+                        slide.classList.remove('slide-active');
+                    }
+                });
+                
+                // Update progress bar jika ada (tetap aman jika null)
+                if (progressBar) {
+                    progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+                }
+            }
+            
+            // Event listener untuk klik pada slide
+            slides.forEach((slide, index) => {
+                slide.addEventListener('click', function(e) {
+                    // Jika tombol di dalam slide diklik, biarkan handler tombol bekerja sendiri.
+                    currentSlide = index;
+                    updateActiveSlide();
+                });
+            });
+            
+            // Animasi tambahan saat halaman dimuat
+            setTimeout(() => {
+                // jika ada header (original script mengakses header), aman untuk panggil
+                const header = document.querySelector('header');
+                if (header) header.classList.add('animate-fade-in');
+                
+                slides.forEach((slide, index) => {
+                    setTimeout(() => {
+                        slide.style.opacity = '1';
+                        slide.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 500);
+            
+            // Inisialisasi
+            updateActiveSlide();
+            
+            // Auto-rotate slides setiap 10 detik
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateActiveSlide();
+            }, 10000);
+        });
+    </script>
+</body>
+</html>
