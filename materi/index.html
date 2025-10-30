@@ -99,6 +99,64 @@
         .floating {
             animation: float 6s ease-in-out infinite;
         }
+
+        /* ===== Modern Canva-like button styles (only buttons) ===== */
+        .modern-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 6px 20px rgba(16,24,40,0.08);
+            border: 0;
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .modern-btn:focus { outline: none; box-shadow: 0 8px 30px rgba(34, 197, 94, 0.12); }
+
+        .modern-btn:hover { transform: translateY(-4px); }
+        .modern-btn:active { transform: translateY(-1px) scale(0.995); }
+
+        /* Gradient variants tuned to the slide color scheme */
+        .modern-btn.primary {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.18);
+        }
+        .modern-btn.secondary {
+            background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #06b6d4 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(139,92,246,0.18);
+        }
+        .modern-btn.accent {
+            background: linear-gradient(90deg, #06b6d4 0%, #34d399 50%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(6,182,212,0.16);
+        }
+        .modern-btn.green {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.14);
+        }
+
+        /* small icon circle inside button for a 'pill + icon' vibe */
+        .modern-btn .icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            display: inline-grid;
+            place-items: center;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
+        }
+
+        /* Ensure we didn't change other layout — only button-specific styling above */
+        /* End button styles */
     </style>
 </head>
 <body class="bg-gray-50">
@@ -114,11 +172,13 @@
                 </div>
                 <h3 class="text-2xl font-bold text-dark mb-4">Masa Penjajahan Barat</h3>
                 <p class="text-gray-600 mb-6">Periode ketika bangsa Eropa mulai menguasai wilayah Nusantara untuk kepentingan ekonomi dan politik.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-primary font-medium">Klik untuk detail</span>
-                    <i class="fas fa-chevron-right text-primary"></i>
-                </div>
-            </a>
+                    <div class="flex justify-end items-center">
+                        <!-- Modern button: only this element changed -->
+                        <button class="modern-btn primary" aria-label="Buka Bab 1">
+                            <span>Buka Bab 1</span>
+                        </button>
+                    </div>
+                </a>
             
             <!-- Slide 2 -->
             <div class="slide bg-white rounded-2xl p-8 animate-slide-right cursor-pointer">
@@ -128,9 +188,11 @@
                 </div>
                 <h3 class="text-2xl font-bold text-dark mb-4">Perlawanan Rakyat Menentang Penjajah</h3>
                 <p class="text-gray-600 mb-6">Berbagai upaya perlawanan yang dilakukan oleh rakyat Indonesia terhadap penjajah asing.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-secondary font-medium">Klik untuk detail</span>
-                    <i class="fas fa-chevron-right text-secondary"></i>
+                <div class="flex justify-end items-center">
+                    <!-- Modern button: only this element changed -->
+                    <button class="modern-btn secondary" aria-label="Buka Bab 2">
+                        <span>Buka Bab 2</span>
+                    </button>
                 </div>
             </div>
             
@@ -142,9 +204,11 @@
                 </div>
                 <h3 class="text-2xl font-bold text-dark mb-4">Pergerakan Kebangsaan Indonesia</h3>
                 <p class="text-gray-600 mb-6">Munculnya organisasi-organisasi yang memperjuangkan kemerdekaan Indonesia.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-accent font-medium">Klik untuk detail</span>
-                    <i class="fas fa-chevron-right text-accent"></i>
+                <div class="flex justify-end items-center">
+                    <!-- Modern button: only this element changed -->
+                    <button class="modern-btn accent" aria-label="Buka Bab 3">
+                        <span>Buka Bab 3</span>
+                    </button>
                 </div>
             </div>
             
@@ -156,9 +220,11 @@
                 </div>
                 <h3 class="text-2xl font-bold text-dark mb-4">Pendudukan Jepang dan Proklamasi</h3>
                 <p class="text-gray-600 mb-6">Periode pendudukan Jepang dan peristiwa penting menuju proklamasi kemerdekaan.</p>
-                <div class="flex justify-between items-center">
-                    <span class="text-green-500 font-medium">Klik untuk detail</span>
-                    <i class="fas fa-chevron-right text-green-500"></i>
+                <div class="flex justify-end items-center">
+                    <!-- Modern button: only this element changed -->
+                    <button class="modern-btn green" aria-label="Buka Bab 4">
+                        <span>Buka Bab 4</span>
+                    </button>
                 </div>
             </div>
         </div>
@@ -180,13 +246,16 @@
                     }
                 });
                 
-                // Update progress bar
-                progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+                // Update progress bar jika ada (tetap aman jika null)
+                if (progressBar) {
+                    progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
+                }
             }
             
             // Event listener untuk klik pada slide
             slides.forEach((slide, index) => {
-                slide.addEventListener('click', function() {
+                slide.addEventListener('click', function(e) {
+                    // Jika tombol di dalam slide diklik, biarkan handler tombol bekerja sendiri.
                     currentSlide = index;
                     updateActiveSlide();
                 });
@@ -194,7 +263,9 @@
             
             // Animasi tambahan saat halaman dimuat
             setTimeout(() => {
-                document.querySelector('header').classList.add('animate-fade-in');
+                // jika ada header (original script mengakses header), aman untuk panggil
+                const header = document.querySelector('header');
+                if (header) header.classList.add('animate-fade-in');
                 
                 slides.forEach((slide, index) => {
                     setTimeout(() => {
