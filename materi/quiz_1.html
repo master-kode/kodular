@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Sejarah - Quizizz Style</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-purple-500 to-blue-600 min-h-screen flex items-center justify-center p-4">
+    <div id="app" class="w-full max-w-4xl">
+        <!-- Halaman Awal -->
+        <div id="start-screen" class="bg-white rounded-2xl shadow-2xl p-8 text-center">
+            <h1 class="text-4xl font-bold text-purple-700 mb-4">Kuis Sejarah</h1>
+            <div class="w-32 h-32 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-history text-white text-5xl"></i>
+            </div>
+            <p class="text-gray-600 mb-8">Jawab 20 pertanyaan tentang sejarah dalam waktu 3 menit per soal!</p>
+            <button id="start-btn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                Mulai Kuis
+            </button>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-clock text-purple-600 mr-2"></i>
+                        <span class="font-bold text-purple-700">Waktu</span>
+                    </div>
+                    <p class="text-sm text-gray-600">3 menit per soal</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-star text-blue-600 mr-2"></i>
+                        <span class="font-bold text-blue-700">Poin</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Jawaban benar dapat 5 poin</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-question-circle text-green-600 mr-2"></i>
+                        <span class="font-bold text-green-700">Soal</span>
+                    </div>
+                    <p class="text-sm text-gray-600">20 pertanyaan pilihan ganda</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Kuis -->
+        <div id="quiz-screen" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-4 flex justify-between items-center">
+                <div class="text-white">
+                    <h2 class="text-xl font-bold">Kuis Sejarah</h2>
+                    <p id="question-counter" class="text-sm">Soal 1 dari 20</p>
+                </div>
+                <div class="text-white text-right">
+                    <div class="text-sm">Waktu Tersisa</div>
+                    <div id="timer" class="text-2xl font-bold">03:00</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="h-2 bg-gray-200">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-1000" style="width: 5%"></div>
+            </div>
+
+            <!-- Soal dan Pilihan -->
+            <div class="p-6">
+                <div id="question-container" class="mb-8">
+                    <h3 id="question-text" class="text-xl font-semibold text-gray-800 mb-6"></h3>
+                    <div id="options-container" class="space-y-4"></div>
+                </div>
+
+                <!-- Tombol Navigasi -->
+                <div class="flex justify-between mt-8">
+                    <button id="prev-btn" class="bg-gray-300 text-gray-700 font-bold py-2 px-6 rounded-lg hover:bg-gray-400 transition disabled:opacity-50 disabled:cursor-not-allowed" disabled>
+                        <i class="fas fa-arrow-left mr-2"></i>Sebelumnya
+                    </button>
+                    <button id="next-btn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-2 px-6 rounded-lg hover:from-purple-700 hover:to-blue-700 transition hidden">
+                        Selanjutnya<i class="fas fa-arrow-right ml-2"></i>
+                    </button>
+                    <button id="finish-btn" class="bg-gradient-to-r from-green-500 to-green-600 text-white font-bold py-2 px-6 rounded-lg hover:from-green-600 hover:to-green-700 transition hidden">
+                        Selesai<i class="fas fa-flag-checkered ml-2"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Hasil -->
+        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-2xl p-8 text-center">
+            <h1 class="text-4xl font-bold text-purple-700 mb-2">Hasil Kuis</h1>
+            <p class="text-gray-600 mb-8">Selamat! Anda telah menyelesaikan kuis sejarah</p>
+            
+            <div class="flex justify-center mb-8">
+                <div class="relative w-48 h-48">
+                    <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#eee"
+                            stroke-width="3"/>
+                        <path id="result-circle" 
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="url(#gradient)"
+                            stroke-width="3"
+                            stroke-dasharray="0, 100"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#8B5CF6" />
+                                <stop offset="100%" stop-color="#3B82F6" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="score-percentage" class="text-4xl font-bold text-gray-800">0%</span>
+                        <span id="score-text" class="text-lg text-gray-600">Nilai</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-purple-700" id="correct-answers">0</div>
+                    <div class="text-sm text-gray-600">Jawaban Benar</div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-700" id="total-score">0</div>
+                    <div class="text-sm text-gray-600">Total Poin</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-green-700" id="max-score">100</div>
+                    <div class="text-sm text-gray-600">Poin Maksimal</div>
+                </div>
+            </div>
+            
+            <button id="restart-btn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                <i class="fas fa-redo mr-2"></i>Main Lagi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data soal dan jawaban
+        const questions = [
+            {
+                question: "1. Peristiwa yang menjadi penyebab utama terhambatnya jalur perdagangan Eropa ke Asia adalah...",
+                options: [
+                    "A. Perang Salib",
+                    "B. Jatuhnya Konstantinopel tahun 1453",
+                    "C. Pembentukan VOC",
+                    "D. Perang Dunia I",
+                    "E. Invasi Mongol"
+                ],
+                correct: "B"
+            },
+            {
+                question: "2. VOC (Vereenigde Oost Indische Compagnie) didirikan oleh Belanda pada tahun...",
+                options: [
+                    "A. 1453",
+                    "B. 1602",
+                    "C. 1799",
+                    "D. 1830",
+                    "E. 1942"
+                ],
+                correct: "B"
+            },
+            {
+                question: "3. Bangsa Eropa yang pertama kali berhasil mendarat di Nusantara (Maluku) adalah...",
+                options: [
+                    "A. Belanda",
+                    "B. Inggris",
+                    "C. Spanyol",
+                    "D. Portugis",
+                    "E. Prancis"
+                ],
+                correct: "D"
+            },
+            {
+                question: "4. VOC dibubarkan pada tahun...",
+                options: [
+                    "A. 1602",
+                    "B. 1799",
+                    "C. 1830",
+                    "D. 1900",
+                    "E. 1942"
+                ],
+                correct: "B"
+            },
+            {
+                question: "5. Kebijakan Cultuurstelsel (Tanam Paksa) diberlakukan sejak tahun 1830 oleh...",
+                options: [
+                    "A. Sultan Agung",
+                    "B. Van den Bosch",
+                    "C. Diponegoro",
+                    "D. Jan Pieterszoon Coen",
+                    "E. Daendels"
+                ],
+                correct: "B"
+            },
+            {
+                question: "6. Rempah-rempah yang menjadi komoditas sangat bernilai di Eropa antara lain...",
+                options: [
+                    "A. Padi, jagung, dan kedelai",
+                    "B. Cengkih, pala, dan lada",
+                    "C. Teh, kopi, dan cokelat",
+                    "D. Kapas, tembakau, dan tebu",
+                    "E. Kelapa, sagu, dan ubi"
+                ],
+                correct: "B"
+            },
+            {
+                question: "7. Politik Etis dilaksanakan pada...",
+                options: [
+                    "A. Abad ke-17",
+                    "B. Abad ke-18",
+                    "C. Awal abad ke-20",
+                    "D. Pertengahan abad ke-19",
+                    "E. Akhir abad ke-16"
+                ],
+                correct: "C"
+            },
+            {
+                question: "8. Tujuan Politik Etis adalah...",
+                options: [
+                    "A. Memaksimalkan eksploitasi kekayaan",
+                    "B. Memberikan perhatian pada pendidikan, kesehatan, dan irigasi",
+                    "C. Memperluas wilayah jajahan",
+                    "D. Mengusir bangsa Eropa lainnya",
+                    "E. Meningkatkan perdagangan rempah"
+                ],
+                correct: "B"
+            },
+            {
+                question: "9. Perang Diponegoro berlangsung pada periode...",
+                options: [
+                    "A. 1799-1800",
+                    "B. 1825-1830",
+                    "C. 1830-1835",
+                    "D. 1900-1905",
+                    "E. 1942-1945"
+                ],
+                correct: "B"
+            },
+            {
+                question: "10. Jepang menginvasi dan menduduki Indonesia sejak...",
+                options: [
+                    "A. Januari 1940",
+                    "B. Maret 1942",
+                    "C. Agustus 1945",
+                    "D. Desember 1941",
+                    "E. Juni 1944"
+                ],
+                correct: "B"
+            },
+            {
+                question: "11. Tokoh perlawanan dari Mataram yang melawan VOC adalah...",
+                options: [
+                    "A. Sultan Nuku",
+                    "B. Sultan Ageng Tirtayasa",
+                    "C. Sultan Agung",
+                    "D. Diponegoro",
+                    "E. Imam Bonjol"
+                ],
+                correct: "C"
+            },
+            {
+                question: "12. Hak istimewa yang dimiliki VOC dalam perdagangan adalah...",
+                options: [
+                    "A. Hak monopoli perdagangan rempah",
+                    "B. Hak mencetak uang sendiri",
+                    "C. Hak membentuk negara",
+                    "D. Hak menguasai seluruh Asia",
+                    "E. Hak mengangkat raja-raja lokal"
+                ],
+                correct: "A"
+            },
+            {
+                question: "13. Perjanjian yang membagi pengaruh antara Portugis dan Spanyol adalah...",
+                options: [
+                    "A. Perjanjian Bongaya",
+                    "B. Perjanjian Tordesillas",
+                    "C. Perjanjian Renville",
+                    "D. Perjanjian Linggarjati",
+                    "E. Perjanjian Roem-Royen"
+                ],
+                correct: "B"
+            },
+            {
+                question: "14. Sultan Ageng Tirtayasa melakukan perlawanan di wilayah...",
+                options: [
+                    "A. Maluku",
+                    "B. Banten",
+                    "C. Aceh",
+                    "D. Bali",
+                    "E. Banjarmasin"
+                ],
+                correct: "B"
+            },
+            {
+                question: "15. Dampak positif penjajahan dalam bidang politik adalah...",
+                options: [
+                    "A. Hilangnya kedaulatan lokal",
+                    "B. Terbentuknya struktur kenegaraan modern dan birokrasi",
+                    "C. Eksploitasi sumber daya alam",
+                    "D. Pembatasan kekuasaan raja",
+                    "E. Kerja paksa yang meluas"
+                ],
+                correct: "B"
+            },
+            {
+                question: "16. Inggris pernah memiliki pengaruh di wilayah...",
+                options: [
+                    "A. Maluku dan Jawa",
+                    "B. Sebagian Sumatra dan Bencoolen",
+                    "C. Bali dan Lombok",
+                    "D. Kalimantan dan Sulawesi",
+                    "E. Papua dan Maluku"
+                ],
+                correct: "B"
+            },
+            {
+                question: "17. Organisasi militer/semimiliter yang dibentuk Jepang untuk melatih rakyat adalah...",
+                options: [
+                    "A. VOC",
+                    "B. PETA",
+                    "C. KNIL",
+                    "D. TNI",
+                    "E. APRA"
+                ],
+                correct: "B"
+            },
+            {
+                question: "18. Kesultanan yang menyebabkan terhambatnya jalur perdagangan Eropa ke Asia adalah...",
+                options: [
+                    "A. Kesultanan Malaka",
+                    "B. Kesultanan Aceh",
+                    "C. Kesultanan Turki Utsmani",
+                    "D. Kesultanan Demak",
+                    "E. Kesultanan Mataram"
+                ],
+                correct: "C"
+            },
+            {
+                question: "19. Dampak negatif Cultuurstelsel dalam bidang sosial adalah...",
+                options: [
+                    "A. Pembangunan infrastruktur",
+                    "B. Penderitaan rakyat tani dan kelaparan",
+                    "C. Munculnya kelas terdidik",
+                    "D. Perbaikan sanitasi",
+                    "E. Mobilitas sosial meningkat"
+                ],
+                correct: "B"
+            },
+            {
+                question: "20. Perkembangan teknologi yang mendukung penjelajahan samudera bangsa Eropa adalah...",
+                options: [
+                    "A. Mesin uap dan telepon",
+                    "B. Kapal yang lebih baik, kompas, dan alat pengukur astronomi",
+                    "C. Pesawat terbang dan radio",
+                    "D. Mobil dan kereta api",
+                    "E. Komputer dan internet"
+                ],
+                correct: "B"
+            }
+        ];
+
+        // Variabel state aplikasi
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questions.length).fill(null);
+        let timeLeft = 180; // 3 menit dalam detik
+        let timerInterval;
+        let scores = Array(questions.length).fill(0);
+        let startTime;
+
+        // Elemen DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startBtn = document.getElementById('start-btn');
+        const prevBtn = document.getElementById('prev-btn');
+        const nextBtn = document.getElementById('next-btn');
+        const finishBtn = document.getElementById('finish-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCounter = document.getElementById('question-counter');
+        const timer = document.getElementById('timer');
+        const progressBar = document.getElementById('progress-bar');
+        const totalScoreEl = document.getElementById('total-score');
+        const correctAnswersEl = document.getElementById('correct-answers');
+        const maxScoreEl = document.getElementById('max-score');
+        const scorePercentageEl = document.getElementById('score-percentage');
+        const resultCircle = document.getElementById('result-circle');
+
+        // Fungsi untuk memulai kuis
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            userAnswers = Array(questions.length).fill(null);
+            scores = Array(questions.length).fill(0);
+            loadQuestion();
+            startTimer();
+        }
+
+        // Fungsi untuk memuat soal
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            questionText.textContent = question.question;
+            questionCounter.textContent = `Soal ${currentQuestionIndex + 1} dari ${questions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Reset dan isi opsi jawaban
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                optionElement.className = `w-full text-left p-4 rounded-lg border-2 transition-all duration-300 ${userAnswers[currentQuestionIndex] === String.fromCharCode(65 + index) ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'}`;
+                optionElement.textContent = option;
+                optionElement.dataset.option = String.fromCharCode(65 + index); // A, B, C, D, E
+                
+                // Jika jawaban sudah dipilih, tampilkan warna yang sesuai
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    if (optionElement.dataset.option === question.correct) {
+                        optionElement.classList.add('bg-green-100', 'border-green-500');
+                    } else if (userAnswers[currentQuestionIndex] === optionElement.dataset.option && userAnswers[currentQuestionIndex] !== question.correct) {
+                        optionElement.classList.add('bg-red-100', 'border-red-500');
+                    }
+                }
+                
+                optionElement.addEventListener('click', () => selectOption(optionElement));
+                optionsContainer.appendChild(optionElement);
+            });
+            
+            // Update status tombol navigasi
+            prevBtn.disabled = currentQuestionIndex === 0;
+            
+            // Sembunyikan tombol next karena sekarang otomatis lanjut
+            nextBtn.classList.add('hidden');
+            
+            if (currentQuestionIndex === questions.length - 1) {
+                finishBtn.classList.remove('hidden');
+            } else {
+                finishBtn.classList.add('hidden');
+            }
+        }
+
+        // Fungsi untuk memilih opsi jawaban
+        function selectOption(optionElement) {
+            // Jika sudah menjawab, tidak bisa mengubah jawaban
+            if (userAnswers[currentQuestionIndex] !== null) return;
+            
+            const selectedOption = optionElement.dataset.option;
+            userAnswers[currentQuestionIndex] = selectedOption;
+            
+            // Hitung skor berdasarkan waktu
+            const elapsedTime = 180 - timeLeft; // Waktu yang telah berlalu dalam detik
+            const question = questions[currentQuestionIndex];
+            
+            if (selectedOption === question.correct) {
+                // Jika jawaban benar dalam waktu <= 3 menit (180 detik)
+                if (elapsedTime <= 180) {
+                    scores[currentQuestionIndex] = 5;
+                } else {
+                    scores[currentQuestionIndex] = 4;
+                }
+            } else {
+                scores[currentQuestionIndex] = 0;
+            }
+            
+            // Tampilkan jawaban yang benar dan salah
+            const options = optionsContainer.querySelectorAll('button');
+            options.forEach(opt => {
+                if (opt.dataset.option === question.correct) {
+                    opt.classList.add('bg-green-100', 'border-green-500');
+                } else if (opt.dataset.option === selectedOption && selectedOption !== question.correct) {
+                    opt.classList.add('bg-red-100', 'border-red-500');
+                }
+                opt.classList.remove('hover:border-purple-300');
+            });
+            
+            // Otomatis lanjut ke soal berikutnya setelah 1 detik
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                    startTimer();
+                } else {
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memulai timer
+        function startTimer() {
+            timeLeft = 180;
+            startTime = Date.now();
+            updateTimerDisplay();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Jika waktu habis dan belum menjawab, beri nilai 0
+                    if (userAnswers[currentQuestionIndex] === null) {
+                        userAnswers[currentQuestionIndex] = 'timeout';
+                        scores[currentQuestionIndex] = 0;
+                    }
+                    // Otomatis lanjut ke soal berikutnya
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        loadQuestion();
+                        startTimer();
+                    } else {
+                        finishQuiz();
+                    }
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memperbarui tampilan timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Ubah warna timer jika waktu hampir habis
+            if (timeLeft <= 30) {
+                timer.classList.add('text-red-500');
+            } else {
+                timer.classList.remove('text-red-500');
+            }
+        }
+
+        // Fungsi untuk pindah ke soal sebelumnya
+        function prevQuestion() {
+            if (currentQuestionIndex > 0) {
+                currentQuestionIndex--;
+                loadQuestion();
+                // Timer tidak direset saat pindah soal
+            }
+        }
+
+        // Fungsi untuk menyelesaikan kuis
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            showResults();
+        }
+
+        // Fungsi untuk menampilkan hasil
+        function showResults() {
+            const totalScore = scores.reduce((sum, score) => sum + score, 0);
+            const correctAnswers = userAnswers.filter((answer, index) => 
+                answer === questions[index].correct
+            ).length;
+            const maxScore = questions.length * 5;
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            totalScoreEl.textContent = totalScore;
+            correctAnswersEl.textContent = `${correctAnswers} / ${questions.length}`;
+            maxScoreEl.textContent = maxScore;
+            scorePercentageEl.textContent = `${percentage}%`;
+            
+            // Animasikan lingkaran hasil
+            const circumference = 2 * Math.PI * 15.9155;
+            const dashOffset = circumference - (percentage / 100) * circumference;
+            resultCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+            resultCircle.style.strokeDashoffset = circumference;
+            
+            setTimeout(() => {
+                resultCircle.style.transition = 'stroke-dashoffset 1.5s ease-in-out';
+                resultCircle.style.strokeDashoffset = dashOffset;
+            }, 500);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startQuiz);
+        prevBtn.addEventListener('click', prevQuestion);
+        finishBtn.addEventListener('click', finishQuiz);
+        restartBtn.addEventListener('click', () => {
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+
+        // Inisialisasi
+        document.addEventListener('DOMContentLoaded', () => {
+            // Kode inisialisasi tambahan jika diperlukan
+        });
+    </script>
+</body>
+</html>
