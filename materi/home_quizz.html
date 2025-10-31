@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Presentasi Sejarah Indonesia</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#8b5cf6',
+                        accent: '#06b6d4',
+                        light: '#f8fafc',
+                        dark: '#1e293b',
+                        quizizPurple: '#8B5CF6',
+                        quizizBlue: '#3B82F6',
+                        quizizGreen: '#10B981'
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.8s ease-in-out',
+                        'slide-up': 'slideUp 0.8s ease-out',
+                        'slide-right': 'slideRight 0.8s ease-out',
+                        'zoom-in': 'zoomIn 0.8s ease-out',
+                        'bounce-in': 'bounceIn 0.8s ease-out',
+                        'pulse-glow': 'pulseGlow 2s infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'float': 'float 6s ease-in-out infinite'
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' }
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(20px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' }
+                        },
+                        slideRight: {
+                            '0%': { transform: 'translateX(-20px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0)', opacity: '1' }
+                        },
+                        zoomIn: {
+                            '0%': { transform: 'scale(0.8)', opacity: '0' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)', opacity: '0.8' },
+                            '100%': { transform: 'scale(1)', opacity: '1' }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { boxShadow: '0 0 5px rgba(59, 130, 246, 0.5)' },
+                            '50%': { boxShadow: '0 0 20px rgba(59, 130, 246, 0.8)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+        
+        .presentation-container {
+            perspective: 1000px;
+        }
+        
+        .slide {
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.5s ease;
+            cursor: pointer;
+            border-radius: 20px;
+            overflow: hidden;
+            position: relative;
+            background: white;
+        }
+        
+        .slide:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .slide-active {
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            animation: pulseGlow 2s infinite;
+        }
+        
+        .progress-bar {
+            height: 6px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            transition: width 0.5s ease;
+        }
+        
+        /* Quiziz-like styling */
+        .quiziz-header {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
+        }
+        
+        .quiziz-card {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .quiziz-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .quiziz-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+        }
+        
+        .quiziz-badge {
+            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+            color: white;
+            border-radius: 50px;
+            padding: 5px 15px;
+            font-size: 0.8rem;
+            font-weight: bold;
+            display: inline-block;
+            margin-bottom: 10px;
+        }
+        
+        .floating {
+            animation: float 6s ease-in-out infinite;
+        }
+        
+        .wiggle {
+            animation: wiggle 2s ease-in-out infinite;
+        }
+        
+        /* Modern button styles */
+        .modern-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 0.6rem 1.25rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.95rem;
+            box-shadow: 0 6px 20px rgba(16,24,40,0.08);
+            border: 0;
+            cursor: pointer;
+            transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
+            backdrop-filter: blur(6px);
+            -webkit-backdrop-filter: blur(6px);
+        }
+
+        .modern-btn:focus { outline: none; box-shadow: 0 8px 30px rgba(34, 197, 94, 0.12); }
+
+        .modern-btn:hover { transform: translateY(-4px); }
+        .modern-btn:active { transform: translateY(-1px) scale(0.995); }
+
+        /* Gradient variants */
+        .modern-btn.primary {
+            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #8b5cf6 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(59,130,246,0.18);
+        }
+        .modern-btn.secondary {
+            background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #06b6d4 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(139,92,246,0.18);
+        }
+        .modern-btn.accent {
+            background: linear-gradient(90deg, #06b6d4 0%, #34d399 50%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(6,182,212,0.16);
+        }
+        .modern-btn.green {
+            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
+            color: white;
+            box-shadow: 0 10px 30px rgba(16,185,129,0.14);
+        }
+
+        .modern-btn .icon-circle {
+            width: 34px;
+            height: 34px;
+            border-radius: 9999px;
+            display: inline-grid;
+            place-items: center;
+            background: rgba(255,255,255,0.12);
+            backdrop-filter: blur(4px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <div class="presentation-container min-h-screen py-8 px-4">
+        <!-- Header dengan gaya Quiziz -->
+        <div class="max-w-6xl mx-auto mb-12">
+            <div class="quiziz-header p-8 text-white text-center animate-fade-in">
+                <h1 class="text-3xl md:text-4xl font-bold mb-4">Presentasi Sejarah Indonesia</h1>
+                <p class="text-lg md:text-xl opacity-90 max-w-2xl mx-auto">Jelajahi perjalanan sejarah bangsa Indonesia melalui presentasi interaktif ini</p>
+                
+                <!-- Progress Bar -->
+                <div class="mt-6 bg-white bg-opacity-20 rounded-full h-3 overflow-hidden">
+                    <div class="progress-bar h-3 rounded-full w-1/4"></div>
+                </div>
+                
+                <div class="flex justify-between mt-2 text-sm">
+                    <span>Slide 1 dari 4</span>
+                    <span>25% Selesai</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Slides Container dengan layout yang lebih menarik -->
+        <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+            <!-- Slide 1 -->
+            <a href="https://drive.google.com/file/d/1yig-tYPgJEHLA2SxNYKdnn9PyPGUzcXK/view?usp=sharing" class="quiziz-card slide animate-slide-up cursor-pointer">
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-quizizBlue text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-lg">1</div>
+                        <div class="ml-4">
+                            <span class="quiziz-badge">BAB 1</span>
+                            <h3 class="text-2xl font-bold text-dark">Masa Penjajahan Barat</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">Periode ketika bangsa Eropa mulai menguasai wilayah Nusantara untuk kepentingan ekonomi dan politik.</p>
+                    <div class="flex items-center text-quizizBlue font-semibold">
+                        <span>Buka Presentasi</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Slide 2 -->
+            <a href="https://drive.google.com/file/d/1rTydAoI1mQCewQgled8acf00ds7AZK7B/view?usp=drivesdk" class="quiziz-card slide animate-slide-right cursor-pointer">
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-quizizPurple text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-lg">2</div>
+                        <div class="ml-4">
+                            <span class="quiziz-badge">BAB 2</span>
+                            <h3 class="text-2xl font-bold text-dark">Perlawanan Rakyat Menentang Penjajah</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">Berbagai upaya perlawanan yang dilakukan oleh rakyat Indonesia terhadap penjajah asing.</p>
+                    <div class="flex items-center text-quizizPurple font-semibold">
+                        <span>Buka Presentasi</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Slide 3 -->
+            <a href="https://drive.google.com/file/d/1EiwZNhLe67VL49iFx--KrO0ORaxByQA1/view?usp=drivesdk" class="quiziz-card slide animate-zoom-in cursor-pointer">
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-accent text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-lg">3</div>
+                        <div class="ml-4">
+                            <span class="quiziz-badge">BAB 3</span>
+                            <h3 class="text-2xl font-bold text-dark">Pergerakan Kebangsaan Indonesia</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">Munculnya organisasi-organisasi yang memperjuangkan kemerdekaan Indonesia.</p>
+                    <div class="flex items-center text-accent font-semibold">
+                        <span>Buka Presentasi</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+            
+            <!-- Slide 4 -->
+            <a href="https://drive.google.com/file/d/1Fswe1J-F4l8fI2u86oRBdPTuw9Kjh5E1/view?usp=drivesdk" class="quiziz-card slide animate-bounce-in cursor-pointer">
+                <div class="p-8">
+                    <div class="flex items-center mb-6">
+                        <div class="bg-quizizGreen text-white rounded-full w-12 h-12 flex items-center justify-center font-bold text-xl shadow-lg">4</div>
+                        <div class="ml-4">
+                            <span class="quiziz-badge">BAB 4</span>
+                            <h3 class="text-2xl font-bold text-dark">Pendudukan Jepang dan Proklamasi</h3>
+                        </div>
+                    </div>
+                    <p class="text-gray-600 mb-6">Periode pendudukan Jepang dan peristiwa penting menuju proklamasi kemerdekaan.</p>
+                    <div class="flex items-center text-quizizGreen font-semibold">
+                        <span>Buka Presentasi</span>
+                        <i class="fas fa-arrow-right ml-2"></i>
+                    </div>
+                </div>
+            </a>
+        </div>
+        
+        <!-- Navigation Buttons -->
+        <div class="max-w-6xl mx-auto mt-12 flex justify-center space-x-4">
+            <button class="modern-btn primary wiggle">
+                <div class="icon-circle">
+                    <i class="fas fa-play"></i>
+                </div>
+                <span>Mulai Presentasi</span>
+            </button>
+            <button class="modern-btn secondary">
+                <div class="icon-circle">
+                    <i class="fas fa-share-alt"></i>
+                </div>
+                <span>Bagikan</span>
+            </button>
+        </div>
+        
+        <!-- Footer dengan informasi tambahan -->
+        <div class="max-w-6xl mx-auto mt-16 text-center text-gray-500 text-sm">
+            <p>Presentasi Sejarah Indonesia - Dibuat untuk pembelajaran interaktif</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const slides = document.querySelectorAll('.slide');
+            const progressBar = document.querySelector('.progress-bar');
+            const progressText = document.querySelector('.flex.justify-between.mt-2 span:first-child');
+            const progressPercent = document.querySelector('.flex.justify-between.mt-2 span:last-child');
+            let currentSlide = 0;
+            
+            // Fungsi untuk mengupdate slide aktif
+            function updateActiveSlide() {
+                slides.forEach((slide, index) => {
+                    if (index === currentSlide) {
+                        slide.classList.add('slide-active');
+                    } else {
+                        slide.classList.remove('slide-active');
+                    }
+                });
+                
+                // Update progress bar
+                if (progressBar) {
+                    const progress = ((currentSlide + 1) / slides.length) * 100;
+                    progressBar.style.width = `${progress}%`;
+                }
+                
+                // Update progress text
+                if (progressText) {
+                    progressText.textContent = `Slide ${currentSlide + 1} dari ${slides.length}`;
+                }
+                
+                if (progressPercent) {
+                    const percent = Math.round(((currentSlide + 1) / slides.length) * 100);
+                    progressPercent.textContent = `${percent}% Selesai`;
+                }
+            }
+            
+            // Event listener untuk klik pada slide
+            slides.forEach((slide, index) => {
+                slide.addEventListener('click', function(e) {
+                    currentSlide = index;
+                    updateActiveSlide();
+                });
+            });
+            
+            // Animasi tambahan saat halaman dimuat
+            setTimeout(() => {
+                slides.forEach((slide, index) => {
+                    setTimeout(() => {
+                        slide.style.opacity = '1';
+                        slide.style.transform = 'translateY(0)';
+                    }, index * 200);
+                });
+            }, 500);
+            
+            // Inisialisasi
+            updateActiveSlide();
+            
+            // Auto-rotate slides setiap 10 detik
+            setInterval(() => {
+                currentSlide = (currentSlide + 1) % slides.length;
+                updateActiveSlide();
+            }, 10000);
+            
+            // Tambahkan event listener untuk tombol navigasi
+            document.querySelector('.modern-btn.primary').addEventListener('click', function() {
+                // Logic untuk memulai presentasi (bisa diarahkan ke slide pertama)
+                window.location.href = slides[0].href;
+            });
+            
+            document.querySelector('.modern-btn.secondary').addEventListener('click', function() {
+                // Logic untuk berbagi presentasi
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Presentasi Sejarah Indonesia',
+                        text: 'Jelajahi perjalanan sejarah bangsa Indonesia melalui presentasi interaktif ini',
+                        url: window.location.href
+                    });
+                } else {
+                    alert('Bagikan presentasi ini dengan menyalin URL halaman ini.');
+                }
+            });
+        });
+    </script>
+</body>
+</html>
