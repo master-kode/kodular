@@ -1,0 +1,557 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kuis Sejarah - Pergerakan Kebangsaan</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-gradient-to-br from-purple-500 to-blue-600 min-h-screen flex items-center justify-center p-4">
+    <div id="app" class="w-full max-w-4xl">
+        <!-- Halaman Awal -->
+        <div id="start-screen" class="bg-white rounded-2xl shadow-2xl p-8 text-center">
+            <h1 class="text-4xl font-bold text-purple-700 mb-4">Kuis Sejarah</h1>
+            <div class="w-32 h-32 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center mx-auto mb-6">
+                <i class="fas fa-history text-white text-5xl"></i>
+            </div>
+            <p class="text-gray-600 mb-8">Jawab 20 pertanyaan tentang Pergerakan Kebangsaan Indonesia dalam waktu 3 menit per soal!</p>
+            <button id="start-btn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                Mulai Kuis
+            </button>
+            <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-4 text-left">
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-clock text-purple-600 mr-2"></i>
+                        <span class="font-bold text-purple-700">Waktu</span>
+                    </div>
+                    <p class="text-sm text-gray-600">3 menit per soal</p>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-star text-blue-600 mr-2"></i>
+                        <span class="font-bold text-blue-700">Poin</span>
+                    </div>
+                    <p class="text-sm text-gray-600">Jawaban benar dapat 5 poin</p>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="flex items-center mb-2">
+                        <i class="fas fa-question-circle text-green-600 mr-2"></i>
+                        <span class="font-bold text-green-700">Soal</span>
+                    </div>
+                    <p class="text-sm text-gray-600">20 pertanyaan pilihan ganda</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Kuis -->
+        <div id="quiz-screen" class="hidden bg-white rounded-2xl shadow-2xl overflow-hidden">
+            <!-- Header -->
+            <div class="bg-gradient-to-r from-purple-600 to-blue-600 p-4 flex justify-between items-center">
+                <div class="text-white">
+                    <h2 class="text-xl font-bold">Kuis Sejarah</h2>
+                    <p id="question-counter" class="text-sm">Soal 1 dari 20</p>
+                </div>
+                <div class="text-white text-right">
+                    <div class="text-sm">Waktu Tersisa</div>
+                    <div id="timer" class="text-2xl font-bold">03:00</div>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="h-2 bg-gray-200">
+                <div id="progress-bar" class="h-full bg-gradient-to-r from-purple-500 to-blue-500 transition-all duration-1000" style="width: 5%"></div>
+            </div>
+
+            <!-- Soal dan Pilihan -->
+            <div class="p-6">
+                <div id="question-container" class="mb-8">
+                    <h3 id="question-text" class="text-xl font-semibold text-gray-800 mb-6"></h3>
+                    <div id="options-container" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Halaman Hasil -->
+        <div id="result-screen" class="hidden bg-white rounded-2xl shadow-2xl p-8 text-center">
+            <h1 class="text-4xl font-bold text-purple-700 mb-2">Hasil Kuis</h1>
+            <p class="text-gray-600 mb-8">Selamat! Anda telah menyelesaikan kuis sejarah</p>
+            
+            <div class="flex justify-center mb-8">
+                <div class="relative w-48 h-48">
+                    <svg class="w-full h-full" viewBox="0 0 36 36">
+                        <path d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="#eee"
+                            stroke-width="3"/>
+                        <path id="result-circle" 
+                            d="M18 2.0845
+                            a 15.9155 15.9155 0 0 1 0 31.831
+                            a 15.9155 15.9155 0 0 1 0 -31.831"
+                            fill="none"
+                            stroke="url(#gradient)"
+                            stroke-width="3"
+                            stroke-dasharray="0, 100"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" stop-color="#8B5CF6" />
+                                <stop offset="100%" stop-color="#3B82F6" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                    <div class="absolute inset-0 flex flex-col items-center justify-center">
+                        <span id="score-percentage" class="text-4xl font-bold text-gray-800">0%</span>
+                        <span id="score-text" class="text-lg text-gray-600">Nilai</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="bg-purple-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-purple-700" id="correct-answers">0</div>
+                    <div class="text-sm text-gray-600">Jawaban Benar</div>
+                </div>
+                <div class="bg-blue-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-blue-700" id="total-score">0</div>
+                    <div class="text-sm text-gray-600">Total Poin</div>
+                </div>
+                <div class="bg-green-50 p-4 rounded-lg">
+                    <div class="text-2xl font-bold text-green-700" id="max-score">100</div>
+                    <div class="text-sm text-gray-600">Poin Maksimal</div>
+                </div>
+            </div>
+            
+            <button id="restart-btn" class="bg-gradient-to-r from-purple-600 to-blue-600 text-white font-bold py-3 px-8 rounded-full text-lg hover:from-purple-700 hover:to-blue-700 transition-all transform hover:scale-105 shadow-lg">
+                <i class="fas fa-redo mr-2"></i>Main Lagi
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Data soal dan jawaban
+        const questions = [
+            {
+                question: "1. Pergerakan kebangsaan Indonesia mulai muncul pada awal abad ke-20 dengan tujuan utama….",
+                options: [
+                    "A. Menghapus sistem kerajaan di Nusantara",
+                    "B. Menentang ajaran agama asing",
+                    "C. Menyebarkan budaya Barat",
+                    "D. Memperjuangkan nasib bangsa dari penjajahan",
+                    "E. Menjadi bagian dari pemerintahan kolonial"
+                ],
+                correct: "D"
+            },
+            {
+                question: "2. Salah satu ciri utama pergerakan kebangsaan adalah….",
+                options: [
+                    "A. Bersifat kedaerahan",
+                    "B. Dilakukan oleh petani",
+                    "C. Tidak terorganisir",
+                    "D. Mengandalkan perang fisik",
+                    "E. Bersifat nasional dan terorganisir"
+                ],
+                correct: "E"
+            },
+            {
+                question: "3. Faktor internal yang mendorong lahirnya pergerakan kebangsaan adalah….",
+                options: [
+                    "A. Kemenangan Jepang atas Rusia",
+                    "B. Pengaruh liberalisme Eropa",
+                    "C. Timbulnya rasa senasib dan sepenanggungan",
+                    "D. Kesuksesan gerakan nasional di Asia-Afrika",
+                    "E. Perkembangan teknologi transportasi"
+                ],
+                correct: "C"
+            },
+            {
+                question: "4. Tokoh pendiri Budi Utomo adalah….",
+                options: [
+                    "A. H.O.S. Cokroaminoto",
+                    "B. Sutomo",
+                    "C. Ahmad Dahlan",
+                    "D. Ki Hajar Dewantara",
+                    "E. Samanhudi"
+                ],
+                correct: "B"
+            },
+            {
+                question: "5. Sarekat Islam mula-mula bernama….",
+                options: [
+                    "A. Sarekat Dagang Islam",
+                    "B. Sarekat Islam Pribumi",
+                    "C. Persatuan Dagang Islam",
+                    "D. Sarekat Niaga Indonesia",
+                    "E. Sarekat Dagang Nusantara"
+                ],
+                correct: "A"
+            },
+            {
+                question: "6. Tujuan utama Budi Utomo adalah….",
+                options: [
+                    "A. Mendirikan pemerintahan sendiri",
+                    "B. Menghapus pengaruh Belanda",
+                    "C. Memajukan pengajaran dan kebudayaan",
+                    "D. Menggabungkan kerajaan-kerajaan Nusantara",
+                    "E. Menentang agama Barat"
+                ],
+                correct: "C"
+            },
+            {
+                question: "7. Organisasi Islam yang didirikan oleh Ahmad Dahlan pada tahun 1912 adalah….",
+                options: [
+                    "A. Sarekat Islam",
+                    "B. Al-Irsyad",
+                    "C. Muhammadiyah",
+                    "D. Nahdlatul Ulama",
+                    "E. Persis"
+                ],
+                correct: "C"
+            },
+            {
+                question: "8. Periode awal pergerakan nasional (1908–1920) disebut juga periode….",
+                options: [
+                    "A. Radikal",
+                    "B. Moderat atau Kooperatif",
+                    "C. Bertahan",
+                    "D. Demokratis",
+                    "E. Revolusioner"
+                ],
+                correct: "B"
+            },
+            {
+                question: "9. Ciri utama periode kooperatif adalah….",
+                options: [
+                    "A. Menolak kerja sama dengan Belanda",
+                    "B. Menggunakan kekerasan",
+                    "C. Berorientasi kemerdekaan penuh",
+                    "D. Bersifat legal dan terbatas pada perbaikan sosial",
+                    "E. Berpusat di luar negeri"
+                ],
+                correct: "D"
+            },
+            {
+                question: "10. Partai Nasional Indonesia (PNI) didirikan oleh….",
+                options: [
+                    "A. Hatta",
+                    "B. Sutomo",
+                    "C. Samanhudi",
+                    "D. Soekarno",
+                    "E. Tan Malaka"
+                ],
+                correct: "D"
+            },
+            {
+                question: "11. Asas perjuangan PNI yang dicetuskan Soekarno dikenal dengan….",
+                options: [
+                    "A. Marxisme",
+                    "B. Islamisme",
+                    "C. Marhaenisme",
+                    "D. Sosialisme",
+                    "E. Nasionalisme sempit"
+                ],
+                correct: "C"
+            },
+            {
+                question: "12. Organisasi Indische Vereeniging kemudian berubah nama menjadi….",
+                options: [
+                    "A. Partai Indonesia",
+                    "B. Sarekat Islam",
+                    "C. Perhimpunan Indonesia",
+                    "D. Taman Siswa",
+                    "E. Parindra"
+                ],
+                correct: "C"
+            },
+            {
+                question: "13. Periode radikal (1920–1930) ditandai dengan….",
+                options: [
+                    "A. Kooperasi dengan Belanda",
+                    "B. Gerakan pendidikan",
+                    "C. Non-kooperatif dan tuntutan kemerdekaan",
+                    "D. Perjuangan kedaerahan",
+                    "E. Dukungan terhadap kolonial"
+                ],
+                correct: "C"
+            },
+            {
+                question: "14. Organisasi yang didirikan Ki Hajar Dewantara adalah….",
+                options: [
+                    "A. Taman Siswa",
+                    "B. Muhammadiyah",
+                    "C. Parindra",
+                    "D. PNI",
+                    "E. Sarekat Islam"
+                ],
+                correct: "A"
+            },
+            {
+                question: "15. Taman Siswa berdiri pada tanggal….",
+                options: [
+                    "A. 20 Mei 1908",
+                    "B. 10 September 1912",
+                    "C. 3 Juli 1922",
+                    "D. 28 Oktober 1928",
+                    "E. 17 Agustus 1945"
+                ],
+                correct: "C"
+            },
+            {
+                question: "16. Parindra pada masa 1930–1942 memiliki sikap politik yang….",
+                options: [
+                    "A. Radikal dan revolusioner",
+                    "B. Kooperatif secara moderat",
+                    "C. Menolak semua bentuk kerja sama",
+                    "D. Anti pendidikan Barat",
+                    "E. Berorientasi pada sistem kerajaan"
+                ],
+                correct: "B"
+            },
+            {
+                question: "17. Salah satu hasil penting pergerakan kebangsaan adalah….",
+                options: [
+                    "A. Terjadinya perang saudara",
+                    "B. Lahirnya sistem kerajaan baru",
+                    "C. Menurunnya semangat nasional",
+                    "D. Meningkatnya kesadaran nasional rakyat Indonesia",
+                    "E. Perpecahan antar organisasi"
+                ],
+                correct: "D"
+            },
+            {
+                question: "18. Slogan 'Satu Nusa, Satu Bangsa, Satu Bahasa' merupakan bukti….",
+                options: [
+                    "A. Radikalisme",
+                    "B. Kesadaran kedaerahan",
+                    "C. Kesadaran nasionalisme",
+                    "D. Gerakan militer",
+                    "E. Gerakan ekonomi rakyat"
+                ],
+                correct: "C"
+            },
+            {
+                question: "19. Perjuangan pada masa ketahanan lebih banyak dilakukan melalui….",
+                options: [
+                    "A. Perang fisik",
+                    "B. Jalur diplomasi, pendidikan, dan ekonomi",
+                    "C. Perlawanan bersenjata",
+                    "D. Gerakan rahasia",
+                    "E. Sistem kerajaan"
+                ],
+                correct: "B"
+            },
+            {
+                question: "20. Pergerakan kebangsaan menjadi dasar bagi perjuangan menuju….",
+                options: [
+                    "A. Reformasi pemerintahan kolonial",
+                    "B. Kekuasaan kerajaan",
+                    "C. Persatuan wilayah Nusantara saja",
+                    "D. Kemandirian ekonomi semata",
+                    "E. Kemerdekaan bangsa Indonesia"
+                ],
+                correct: "E"
+            }
+        ];
+
+        // Variabel state aplikasi
+        let currentQuestionIndex = 0;
+        let userAnswers = Array(questions.length).fill(null);
+        let timeLeft = 180; // 3 menit dalam detik
+        let timerInterval;
+        let scores = Array(questions.length).fill(0);
+        let startTime;
+
+        // Elemen DOM
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultScreen = document.getElementById('result-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionText = document.getElementById('question-text');
+        const optionsContainer = document.getElementById('options-container');
+        const questionCounter = document.getElementById('question-counter');
+        const timer = document.getElementById('timer');
+        const progressBar = document.getElementById('progress-bar');
+        const totalScoreEl = document.getElementById('total-score');
+        const correctAnswersEl = document.getElementById('correct-answers');
+        const maxScoreEl = document.getElementById('max-score');
+        const scorePercentageEl = document.getElementById('score-percentage');
+        const resultCircle = document.getElementById('result-circle');
+
+        // Fungsi untuk memulai kuis
+        function startQuiz() {
+            startScreen.classList.add('hidden');
+            quizScreen.classList.remove('hidden');
+            currentQuestionIndex = 0;
+            userAnswers = Array(questions.length).fill(null);
+            scores = Array(questions.length).fill(0);
+            loadQuestion();
+            startTimer();
+        }
+
+        // Fungsi untuk memuat soal
+        function loadQuestion() {
+            const question = questions[currentQuestionIndex];
+            questionText.textContent = question.question;
+            questionCounter.textContent = `Soal ${currentQuestionIndex + 1} dari ${questions.length}`;
+            
+            // Update progress bar
+            const progress = ((currentQuestionIndex + 1) / questions.length) * 100;
+            progressBar.style.width = `${progress}%`;
+            
+            // Reset dan isi opsi jawaban
+            optionsContainer.innerHTML = '';
+            question.options.forEach((option, index) => {
+                const optionElement = document.createElement('button');
+                optionElement.className = `w-full text-left p-4 rounded-lg border-2 transition-all duration-300 ${userAnswers[currentQuestionIndex] === String.fromCharCode(65 + index) ? 'border-purple-500 bg-purple-50' : 'border-gray-200 hover:border-purple-300'}`;
+                optionElement.textContent = option;
+                optionElement.dataset.option = String.fromCharCode(65 + index); // A, B, C, D, E
+                
+                // Jika jawaban sudah dipilih, tampilkan warna yang sesuai
+                if (userAnswers[currentQuestionIndex] !== null) {
+                    if (optionElement.dataset.option === question.correct) {
+                        optionElement.classList.add('bg-green-100', 'border-green-500');
+                    } else if (userAnswers[currentQuestionIndex] === optionElement.dataset.option && userAnswers[currentQuestionIndex] !== question.correct) {
+                        optionElement.classList.add('bg-red-100', 'border-red-500');
+                    }
+                }
+                
+                optionElement.addEventListener('click', () => selectOption(optionElement));
+                optionsContainer.appendChild(optionElement);
+            });
+        }
+
+        // Fungsi untuk memilih opsi jawaban
+        function selectOption(optionElement) {
+            // Jika sudah menjawab, tidak bisa mengubah jawaban
+            if (userAnswers[currentQuestionIndex] !== null) return;
+            
+            const selectedOption = optionElement.dataset.option;
+            userAnswers[currentQuestionIndex] = selectedOption;
+            
+            // Hitung skor berdasarkan waktu
+            const elapsedTime = 180 - timeLeft; // Waktu yang telah berlalu dalam detik
+            const question = questions[currentQuestionIndex];
+            
+            if (selectedOption === question.correct) {
+                // Jika jawaban benar dalam waktu <= 3 menit (180 detik)
+                if (elapsedTime <= 180) {
+                    scores[currentQuestionIndex] = 5;
+                } else {
+                    scores[currentQuestionIndex] = 4;
+                }
+            } else {
+                scores[currentQuestionIndex] = 0;
+            }
+            
+            // Tampilkan jawaban yang benar dan salah
+            const options = optionsContainer.querySelectorAll('button');
+            options.forEach(opt => {
+                if (opt.dataset.option === question.correct) {
+                    opt.classList.add('bg-green-100', 'border-green-500');
+                } else if (opt.dataset.option === selectedOption && selectedOption !== question.correct) {
+                    opt.classList.add('bg-red-100', 'border-red-500');
+                }
+                opt.classList.remove('hover:border-purple-300');
+            });
+            
+            // Otomatis lanjut ke soal berikutnya setelah 1 detik
+            setTimeout(() => {
+                if (currentQuestionIndex < questions.length - 1) {
+                    currentQuestionIndex++;
+                    loadQuestion();
+                    startTimer();
+                } else {
+                    finishQuiz();
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memulai timer
+        function startTimer() {
+            timeLeft = 180;
+            startTime = Date.now();
+            updateTimerDisplay();
+            
+            clearInterval(timerInterval);
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateTimerDisplay();
+                
+                if (timeLeft <= 0) {
+                    clearInterval(timerInterval);
+                    // Jika waktu habis dan belum menjawab, beri nilai 0
+                    if (userAnswers[currentQuestionIndex] === null) {
+                        userAnswers[currentQuestionIndex] = 'timeout';
+                        scores[currentQuestionIndex] = 0;
+                    }
+                    // Otomatis lanjut ke soal berikutnya
+                    if (currentQuestionIndex < questions.length - 1) {
+                        currentQuestionIndex++;
+                        loadQuestion();
+                        startTimer();
+                    } else {
+                        finishQuiz();
+                    }
+                }
+            }, 1000);
+        }
+
+        // Fungsi untuk memperbarui tampilan timer
+        function updateTimerDisplay() {
+            const minutes = Math.floor(timeLeft / 60);
+            const seconds = timeLeft % 60;
+            timer.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            
+            // Ubah warna timer jika waktu hampir habis
+            if (timeLeft <= 30) {
+                timer.classList.add('text-red-500');
+            } else {
+                timer.classList.remove('text-red-500');
+            }
+        }
+
+        // Fungsi untuk menyelesaikan kuis
+        function finishQuiz() {
+            clearInterval(timerInterval);
+            quizScreen.classList.add('hidden');
+            resultScreen.classList.remove('hidden');
+            showResults();
+        }
+
+        // Fungsi untuk menampilkan hasil
+        function showResults() {
+            const totalScore = scores.reduce((sum, score) => sum + score, 0);
+            const correctAnswers = userAnswers.filter((answer, index) => 
+                answer === questions[index].correct
+            ).length;
+            const maxScore = questions.length * 5;
+            const percentage = Math.round((totalScore / maxScore) * 100);
+            
+            totalScoreEl.textContent = totalScore;
+            correctAnswersEl.textContent = `${correctAnswers} / ${questions.length}`;
+            maxScoreEl.textContent = maxScore;
+            scorePercentageEl.textContent = `${percentage}%`;
+            
+            // Animasikan lingkaran hasil
+            const circumference = 2 * Math.PI * 15.9155;
+            const dashOffset = circumference - (percentage / 100) * circumference;
+            resultCircle.style.strokeDasharray = `${circumference} ${circumference}`;
+            resultCircle.style.strokeDashoffset = circumference;
+            
+            setTimeout(() => {
+                resultCircle.style.transition = 'stroke-dashoffset 1.5s ease-in-out';
+                resultCircle.style.strokeDashoffset = dashOffset;
+            }, 500);
+        }
+
+        // Event Listeners
+        startBtn.addEventListener('click', startQuiz);
+        restartBtn.addEventListener('click', () => {
+            resultScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        });
+    </script>
+</body>
+</html>
