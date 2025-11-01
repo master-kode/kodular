@@ -260,6 +260,11 @@
             display: none;
         }
         
+        /* Hide previous button on first slide */
+        .prev-btn-hidden #prev-btn {
+            display: none;
+        }
+        
         /* Adjust layout when next button is hidden */
         .next-btn-hidden .nav-buttons {
             justify-content: center;
@@ -267,6 +272,15 @@
         
         .next-btn-hidden .counter {
             margin-right: 0;
+        }
+        
+        /* Adjust layout when previous button is hidden */
+        .prev-btn-hidden .nav-buttons {
+            justify-content: flex-end;
+        }
+        
+        .prev-btn-hidden .counter {
+            margin-left: 0;
         }
     </style>
 </head>
@@ -512,6 +526,13 @@
                     navContainer.classList.add('next-btn-hidden');
                 } else {
                     navContainer.classList.remove('next-btn-hidden');
+                }
+                
+                // Sembunyikan tombol sebelumnya di slide pertama
+                if (currentSlide === 1) {
+                    navContainer.classList.add('prev-btn-hidden');
+                } else {
+                    navContainer.classList.remove('prev-btn-hidden');
                 }
                 
                 // Perbarui dots
