@@ -1,10 +1,9 @@
-
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Presentasi Sejarah Indonesia</title>
+    <title>Permainan Quiz Sejarah Indonesia</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script>
@@ -19,7 +18,14 @@
                         dark: '#1e293b',
                         quizizPurple: '#8B5CF6',
                         quizizBlue: '#3B82F6',
-                        quizizGreen: '#10B981'
+                        quizizGreen: '#10B981',
+                        quizizz: {
+                            purple: '#9333EA',
+                            blue: '#2563EB',
+                            green: '#10B981',
+                            pink: '#EC4899',
+                            orange: '#F59E0B'
+                        }
                     },
                     animation: {
                         'fade-in': 'fadeIn 0.8s ease-in-out',
@@ -29,7 +35,11 @@
                         'bounce-in': 'bounceIn 0.8s ease-out',
                         'pulse-glow': 'pulseGlow 2s infinite',
                         'wiggle': 'wiggle 1s ease-in-out infinite',
-                        'float': 'float 6s ease-in-out infinite'
+                        'float': 'float 6s ease-in-out infinite',
+                        'tilt': 'tilt 10s infinite linear',
+                        'slide-in-bl': 'slideInBottomLeft 0.5s ease-out',
+                        'slide-in-br': 'slideInBottomRight 0.5s ease-out',
+                        'pulse-slow': 'pulse 3s infinite'
                     },
                     keyframes: {
                         fadeIn: {
@@ -64,7 +74,26 @@
                         float: {
                             '0%, 100%': { transform: 'translateY(0)' },
                             '50%': { transform: 'translateY(-10px)' }
+                        },
+                        tilt: {
+                            '0%, 50%, 100%': { transform: 'rotateY(0deg) rotateX(0deg)' },
+                            '25%': { transform: 'rotateY(5deg) rotateX(2deg)' },
+                            '75%': { transform: 'rotateY(-5deg) rotateX(-2deg)' }
+                        },
+                        slideInBottomLeft: {
+                            '0%': { transform: 'translateX(-50px) translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0) translateY(0)', opacity: '1' }
+                        },
+                        slideInBottomRight: {
+                            '0%': { transform: 'translateX(50px) translateY(50px)', opacity: '0' },
+                            '100%': { transform: 'translateX(0) translateY(0)', opacity: '1' }
                         }
+                    },
+                    transformStyle: {
+                        'preserve-3d': 'preserve-3d'
+                    },
+                    backfaceVisibility: {
+                        'hidden': 'hidden'
                     }
                 }
             }
@@ -73,7 +102,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             overflow-x: hidden;
         }
@@ -82,24 +111,20 @@
             perspective: 1000px;
         }
         
-        .slide {
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.5s ease;
-            cursor: pointer;
-            border-radius: 20px;
-            overflow: hidden;
-            position: relative;
-            background: white;
+        .slide-3d {
+            transform-style: preserve-3d;
+            transition: transform 0.6s ease, box-shadow 0.3s ease;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
         }
         
-        .slide:hover {
-            transform: translateY(-8px) scale(1.02);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        .slide-3d:hover {
+            transform: translateY(-10px) rotateX(5deg) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
         }
         
         .slide-active {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+            transform: scale(1.05) rotateY(5deg);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             animation: pulseGlow 2s infinite;
         }
         
@@ -109,204 +134,257 @@
             transition: width 0.5s ease;
         }
         
-        /* Quiziz-like styling */
-        .quiziz-header {
-            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+        .quizizz-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
             border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(139, 92, 246, 0.3);
-        }
-        
-        .quiziz-card {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
             overflow: hidden;
-            position: relative;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
         }
         
-        .quiziz-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        .quizizz-header {
+            background: linear-gradient(90deg, #9333EA 0%, #2563EB 100%);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 0 0 40px 40px;
         }
         
-        .quiziz-card::before {
-            content: '';
+        .quizizz-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto;
+        }
+        
+        .particles-container {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
-            height: 5px;
-            background: linear-gradient(to right, #3b82f6, #8b5cf6);
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
         }
         
-        .quiziz-badge {
-            background: linear-gradient(135deg, #8B5CF6 0%, #3B82F6 100%);
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.5);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+        
+        .quizizz-button {
+            background: linear-gradient(90deg, #9333EA 0%, #2563EB 100%);
             color: white;
             border-radius: 50px;
-            padding: 5px 15px;
-            font-size: 0.8rem;
-            font-weight: bold;
-            display: inline-block;
-            margin-bottom: 10px;
-        }
-        
-        .floating {
-            animation: float 6s ease-in-out infinite;
-        }
-        
-        .wiggle {
-            animation: wiggle 2s ease-in-out infinite;
-        }
-        
-        /* Modern button styles */
-        .modern-btn {
+            padding: 0.8rem 1.5rem;
+            font-weight: 600;
+            box-shadow: 0 4px 15px rgba(147, 51, 234, 0.4);
+            transition: all 0.3s ease;
             display: inline-flex;
             align-items: center;
-            gap: 0.6rem;
-            padding: 0.6rem 1.25rem;
-            border-radius: 9999px;
+            gap: 0.5rem;
+        }
+        
+        .quizizz-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(147, 51, 234, 0.6);
+        }
+        
+        .quizizz-button:active {
+            transform: translateY(-1px);
+        }
+        
+        .badge {
+            background: linear-gradient(90deg, #EC4899 0%, #F59E0B 100%);
+            color: white;
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
             font-weight: 600;
-            font-size: 0.95rem;
-            box-shadow: 0 6px 20px rgba(16,24,40,0.08);
-            border: 0;
-            cursor: pointer;
-            transition: transform 180ms ease, box-shadow 180ms ease, opacity 180ms ease;
-            backdrop-filter: blur(6px);
-            -webkit-backdrop-filter: blur(6px);
         }
-
-        .modern-btn:focus { outline: none; box-shadow: 0 8px 30px rgba(34, 197, 94, 0.12); }
-
-        .modern-btn:hover { transform: translateY(-4px); }
-        .modern-btn:active { transform: translateY(-1px) scale(0.995); }
-
-        /* Gradient variants */
-        .modern-btn.primary {
-            background: linear-gradient(90deg, #3b82f6 0%, #60a5fa 50%, #8b5cf6 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(59,130,246,0.18);
+        
+        .floating-object {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%);
+            backdrop-filter: blur(5px);
+            animation: float 8s infinite ease-in-out;
         }
-        .modern-btn.secondary {
-            background: linear-gradient(90deg, #8b5cf6 0%, #a78bfa 50%, #06b6d4 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(139,92,246,0.18);
+        
+        .quiz-card-icon {
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 70px;
+            height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
         }
-        .modern-btn.accent {
-            background: linear-gradient(90deg, #06b6d4 0%, #34d399 50%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(6,182,212,0.16);
-        }
-        .modern-btn.green {
-            background: linear-gradient(90deg, #10b981 0%, #34d399 100%);
-            color: white;
-            box-shadow: 0 10px 30px rgba(16,185,129,0.14);
-        }
-
-        .modern-btn .icon-circle {
-            width: 34px;
-            height: 34px;
-            border-radius: 9999px;
-            display: inline-grid;
-            place-items: center;
-            background: rgba(255,255,255,0.12);
-            backdrop-filter: blur(4px);
+        
+        .quiz-card-gradient {
+            height: 8px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
         }
     </style>
 </head>
-<body class="bg-gray-50">
-    <div class="presentation-container min-h-screen py-8 px-4">
-        <!-- Header dengan gaya Quiziz -->
-        <div class="max-w-6xl mx-auto mb-12">
-            <div class="quiziz-header p-8 text-white text-center animate-fade-in">
-                <h1 class="text-3xl md:text-4xl font-bold mb-4">Permainan Quiz Sejarah Indonesia</h1>
-                                                                                                
-                
-                
+<body class="bg-gradient-to-br from-quizizz-purple to-quizizz-blue">
+    <!-- Floating Background Objects -->
+    <div class="particles-container">
+        <div class="floating-object w-64 h-64 -top-32 -left-32 opacity-20"></div>
+        <div class="floating-object w-40 h-40 top-1/4 right-10 opacity-30" style="animation-delay: -2s;"></div>
+        <div class="floating-object w-24 h-24 bottom-1/4 left-1/4 opacity-40" style="animation-delay: -4s;"></div>
+        <div class="floating-object w-32 h-32 bottom-20 right-1/4 opacity-25" style="animation-delay: -6s;"></div>
+    </div>
+    
+    <!-- Header Section -->
+    <header class="text-center py-8 px-4">
+        <div class="max-w-4xl mx-auto">
+            <div class="quizizz-header rounded-2xl p-6 animate-slide-up">
+                <div class="quizizz-icon mb-4">
+                    <i class="fas fa-gamepad text-2xl"></i>
+                </div>
+                <h1 class="text-3xl md:text-4xl font-bold mb-2">Permainan Quiz Sejarah Indonesia Kelas XI</h1>
+                <p class="text-lg opacity-90">Uji pengetahuan sejarah Anda dengan kuis interaktif</p>
+                <div class="flex justify-center mt-4">
+                    <div class="badge animate-pulse-slow">Kuis Interaktif</div>
+                </div>
             </div>
         </div>
+    </header>
+    
+    <!-- Main Content -->
+    <div class="presentation-container min-h-screen py-8 px-4">
         
-        <!-- Slides Container dengan layout yang lebih menarik -->
+        <!-- Slides Container -->
         <div class="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-            <!-- Slide 1 -->
-            <a href="quiz-1.html" class="quiziz-card slide animate-slide-up cursor-pointer">
-                <div class="p-8">
+            <!-- Quiz 1 -->
+            <a href="quiz-1.html" 
+               class="slide-3d quizizz-card rounded-2xl overflow-hidden animate-slide-in-bl cursor-pointer transform transition-all duration-500">
+                <div class="p-6">
                     <div class="flex items-center mb-6">
-                        <div class="ml-4">
-                            <h3 class="text-2xl font-bold text-dark">BAB 1 : Masa Penjajahan Barat</h3>
+                        <div class="quiz-card-icon bg-gradient-to-r from-quizizz-blue to-quizizz-purple">
+                            <i class="fas fa-crown text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">BAB 1</div>
+                            <h3 class="text-xl font-bold text-dark">Masa Penjajahan Barat</h3>
                         </div>
                     </div>
                     <p class="text-gray-600 mb-6">Periode ketika bangsa Eropa mulai menguasai wilayah Nusantara untuk kepentingan ekonomi dan politik.</p>
-                    <div class="flex items-center text-quizizBlue font-semibold">
-                        <span>Buka Quiz</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
+                    <div class="flex justify-between items-center">
+                        <div class="text-quizizz-purple font-semibold flex items-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            <span>Mulai Kuis</span>
+                        </div>
+                        <div class="text-gray-400 text-sm flex items-center">
+                            <i class="far fa-question-circle mr-1"></i>
+                            <span>20 Pertanyaan</span>
+                        </div>
                     </div>
                 </div>
+                <div class="quiz-card-gradient bg-gradient-to-r from-quizizz-blue to-quizizz-purple"></div>
             </a>
             
-            <!-- Slide 2 -->
-            <a href="quiz-2.html" class="quiziz-card slide animate-slide-right cursor-pointer">
-                <div class="p-8">
+            <!-- Quiz 2 -->
+            <a href="quiz-2.html" 
+               class="slide-3d quizizz-card rounded-2xl overflow-hidden animate-slide-in-br cursor-pointer transform transition-all duration-500">
+                <div class="p-6">
                     <div class="flex items-center mb-6">
-                        <div class="ml-4">
-                            <h3 class="text-2xl font-bold text-dark">BAB 2 : Perlawanan Rakyat Menentang Penjajah</h3>
+                        <div class="quiz-card-icon bg-gradient-to-r from-quizizz-green to-quizizz-blue">
+                            <i class="fas fa-shield-alt text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">BAB 2</div>
+                            <h3 class="text-xl font-bold text-dark">Perlawanan Rakyat Menentang Penjajah</h3>
                         </div>
                     </div>
                     <p class="text-gray-600 mb-6">Berbagai upaya perlawanan yang dilakukan oleh rakyat Indonesia terhadap penjajah asing.</p>
-                    <div class="flex items-center text-quizizPurple font-semibold">
-                        <span>Buka Quiz</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
+                    <div class="flex justify-between items-center">
+                        <div class="text-quizizz-purple font-semibold flex items-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            <span>Mulai Kuis</span>
+                        </div>
+                        <div class="text-gray-400 text-sm flex items-center">
+                            <i class="far fa-question-circle mr-1"></i>
+                            <span>20 Pertanyaan</span>
+                        </div>
                     </div>
                 </div>
+                <div class="quiz-card-gradient bg-gradient-to-r from-quizizz-green to-quizizz-blue"></div>
             </a>
             
-            <!-- Slide 3 -->
-            <a href="quiz-3.html" class="quiziz-card slide animate-zoom-in cursor-pointer">
-                <div class="p-8">
+            <!-- Quiz 3 -->
+            <a href="quiz-3.html" 
+               class="slide-3d quizizz-card rounded-2xl overflow-hidden animate-slide-in-bl cursor-pointer transform transition-all duration-500" style="animation-delay: 0.2s;">
+                <div class="p-6">
                     <div class="flex items-center mb-6">
-                        
-                        <div class="ml-4">
-                      
-                            <h3 class="text-2xl font-bold text-dark">BAB 3 : Pergerakan Kebangsaan Indonesia</h3>
+                        <div class="quiz-card-icon bg-gradient-to-r from-quizizz-pink to-quizizz-orange">
+                            <i class="fas fa-flag text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">BAB 3</div>
+                            <h3 class="text-xl font-bold text-dark">Pergerakan Kebangsaan Indonesia</h3>
                         </div>
                     </div>
                     <p class="text-gray-600 mb-6">Munculnya organisasi-organisasi yang memperjuangkan kemerdekaan Indonesia.</p>
-                    <div class="flex items-center text-accent font-semibold">
-                        <span>Buka Quiz</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
+                    <div class="flex justify-between items-center">
+                        <div class="text-quizizz-purple font-semibold flex items-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            <span>Mulai Kuis</span>
+                        </div>
+                        <div class="text-gray-400 text-sm flex items-center">
+                            <i class="far fa-question-circle mr-1"></i>
+                            <span>20 Pertanyaan</span>
+                        </div>
                     </div>
                 </div>
+                <div class="quiz-card-gradient bg-gradient-to-r from-quizizz-pink to-quizizz-orange"></div>
             </a>
             
-            <!-- Slide 4 -->
-            <a href="quiz-4.html" class="quiziz-card slide animate-bounce-in cursor-pointer">
-                <div class="p-8">
+            <!-- Quiz 4 -->
+            <a href="quiz-4.html" 
+               class="slide-3d quizizz-card rounded-2xl overflow-hidden animate-slide-in-br cursor-pointer transform transition-all duration-500" style="animation-delay: 0.2s;">
+                <div class="p-6">
                     <div class="flex items-center mb-6">
-                      
-                        <div class="ml-4">
-   
-                            <h3 class="text-2xl font-bold text-dark">BAB 4 : Pendudukan Jepang dan Proklamasi</h3>
+                        <div class="quiz-card-icon bg-gradient-to-r from-quizizz-orange to-quizizz-pink">
+                            <i class="fas fa-star text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <div class="text-sm text-gray-500">BAB 4</div>
+                            <h3 class="text-xl font-bold text-dark">Pendudukan Jepang dan Proklamasi</h3>
                         </div>
                     </div>
                     <p class="text-gray-600 mb-6">Periode pendudukan Jepang dan peristiwa penting menuju proklamasi kemerdekaan.</p>
-                    <div class="flex items-center text-quizizGreen font-semibold">
-                        <span>Buka Quiz</span>
-                        <i class="fas fa-arrow-right ml-2"></i>
+                    <div class="flex justify-between items-center">
+                        <div class="text-quizizz-purple font-semibold flex items-center">
+                            <i class="fas fa-play-circle mr-2"></i>
+                            <span>Mulai Kuis</span>
+                        </div>
+                        <div class="text-gray-400 text-sm flex items-center">
+                            <i class="far fa-question-circle mr-1"></i>
+                            <span>20 Pertanyaan</span>
+                        </div>
                     </div>
                 </div>
+                <div class="quiz-card-gradient bg-gradient-to-r from-quizizz-orange to-quizizz-pink"></div>
             </a>
         </div>
         
-        <!-- Navigation Buttons -->
-      
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const slides = document.querySelectorAll('.slide');
+            const slides = document.querySelectorAll('.slide-3d');
             const progressBar = document.querySelector('.progress-bar');
-            const progressText = document.querySelector('.flex.justify-between.mt-2 span:first-child');
-            const progressPercent = document.querySelector('.flex.justify-between.mt-2 span:last-child');
             let currentSlide = 0;
             
             // Fungsi untuk mengupdate slide aktif
@@ -314,25 +392,16 @@
                 slides.forEach((slide, index) => {
                     if (index === currentSlide) {
                         slide.classList.add('slide-active');
+                        slide.style.zIndex = '10';
                     } else {
                         slide.classList.remove('slide-active');
+                        slide.style.zIndex = '1';
                     }
                 });
                 
                 // Update progress bar
                 if (progressBar) {
-                    const progress = ((currentSlide + 1) / slides.length) * 100;
-                    progressBar.style.width = `${progress}%`;
-                }
-                
-                // Update progress text
-                if (progressText) {
-                    progressText.textContent = `Slide ${currentSlide + 1} dari ${slides.length}`;
-                }
-                
-                if (progressPercent) {
-                    const percent = Math.round(((currentSlide + 1) / slides.length) * 100);
-                    progressPercent.textContent = `${percent}% Selesai`;
+                    progressBar.style.width = `${((currentSlide + 1) / slides.length) * 100}%`;
                 }
             }
             
@@ -346,6 +415,9 @@
             
             // Animasi tambahan saat halaman dimuat
             setTimeout(() => {
+                const header = document.querySelector('header');
+                if (header) header.classList.add('animate-fade-in');
+                
                 slides.forEach((slide, index) => {
                     setTimeout(() => {
                         slide.style.opacity = '1';
@@ -363,24 +435,38 @@
                 updateActiveSlide();
             }, 10000);
             
-            // Tambahkan event listener untuk tombol navigasi
-            document.querySelector('.modern-btn.primary').addEventListener('click', function() {
-                // Logic untuk memulai presentasi (bisa diarahkan ke slide pertama)
-                window.location.href = slides[0].href;
-            });
-            
-            document.querySelector('.modern-btn.secondary').addEventListener('click', function() {
-                // Logic untuk berbagi presentasi
-                if (navigator.share) {
-                    navigator.share({
-                        title: 'Presentasi Sejarah Indonesia',
-                        text: 'Jelajahi perjalanan sejarah bangsa Indonesia melalui presentasi interaktif ini',
-                        url: window.location.href
-                    });
-                } else {
-                    alert('Bagikan presentasi ini dengan menyalin URL halaman ini.');
+            // Tambahkan partikel latar belakang
+            function createParticles() {
+                const container = document.querySelector('.particles-container');
+                if (!container) return;
+                
+                for (let i = 0; i < 15; i++) {
+                    const particle = document.createElement('div');
+                    particle.classList.add('particle');
+                    
+                    // Ukuran acak
+                    const size = Math.random() * 10 + 5;
+                    particle.style.width = `${size}px`;
+                    particle.style.height = `${size}px`;
+                    
+                    // Posisi acak
+                    particle.style.left = `${Math.random() * 100}%`;
+                    particle.style.top = `${Math.random() * 100}%`;
+                    
+                    // Animasi acak
+                    const duration = Math.random() * 20 + 10;
+                    const delay = Math.random() * 5;
+                    particle.style.animation = `float ${duration}s infinite linear`;
+                    particle.style.animationDelay = `${delay}s`;
+                    
+                    // Opasitas acak
+                    particle.style.opacity = Math.random() * 0.5 + 0.1;
+                    
+                    container.appendChild(particle);
                 }
-            });
+            }
+            
+            createParticles();
         });
     </script>
 </body>
